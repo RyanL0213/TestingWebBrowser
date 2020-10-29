@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -30,6 +31,8 @@ public class webviewFragment extends Fragment {
     WebView webview;
     String preaddress = "https://";
     webviewFragment.setaddressInterface parentActivity;
+    private final String A_KEY = "address";
+    String finaladdress;
 
 
     Handler responseHandler = new Handler(new Handler.Callback() {
@@ -50,17 +53,26 @@ public class webviewFragment extends Fragment {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             parentActivity.setaddress(url);
+            finaladdress = url;
 
             return true;
         }
     }
 
+
+   /* @Override
+   /* public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        performURL(finaladdress);
+    }
+
+    */
+
     public webviewFragment() {
         // Required empty public constructor
     }
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-    }
+
 
 
 
@@ -75,12 +87,19 @@ public class webviewFragment extends Fragment {
 
      */
 
-    /*public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        if(savedInstanceState!=null){
+            finaladdress = savedInstanceState.getString(A_KEY);
+            performURL(finaladdress);
+
+        }
+
     }
 
-     */
+
+
+
 
 
 
@@ -94,7 +113,7 @@ public class webviewFragment extends Fragment {
     }
 
     public void performURL(final String s) {
-        final String finaladdress;
+
 
         try {
             if(!s.contains(preaddress)) {
@@ -132,4 +151,14 @@ public class webviewFragment extends Fragment {
     interface setaddressInterface{
         void setaddress(String s);
     }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(A_KEY,finaladdress);
+    }
+
+
+
 }
