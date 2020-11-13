@@ -33,8 +33,8 @@ public class webviewFragment extends Fragment {
     webviewFragment.setaddressInterface parentActivity;
     private final String A_KEY = "address";
     static String finaladdress;
-    ViewPager viewPager;
-    final ArrayList<webviewFragment> fragments = new ArrayList<>();
+    //ViewPager viewPager;
+    //final ArrayList<webviewFragment> fragments = new ArrayList<>();
 
 
     Handler responseHandler = new Handler(new Handler.Callback() {
@@ -52,9 +52,10 @@ public class webviewFragment extends Fragment {
     });
 
     public void addfragment() {
-        fragments.add(new webviewFragment());
-        viewPager.getAdapter().notifyDataSetChanged();;
+
     }
+
+
 
     private class HelloWebViewClient extends WebViewClient {
         @Override
@@ -114,27 +115,14 @@ public class webviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         l = inflater.inflate(R.layout.fragment_webview, container, false);
-        viewPager = l.findViewById(R.id.viewPage);
         webview = l.findViewById(R.id.webView);
 
-
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
-            @NonNull
-            @Override
-            public Fragment getItem(int position) {
-                return fragments.get(position);
-            }
-
-            @Override
-            public int getCount() {
-                return fragments.size();
-            }
-        });
-
-
         return l;
+    }
+
+    public String givemeaddress(){
+        return finaladdress;
     }
 
     public void performURL(final String s) {

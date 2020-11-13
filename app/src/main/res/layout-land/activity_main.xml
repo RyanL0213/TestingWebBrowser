@@ -13,22 +13,9 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="3dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.011"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/container_2"
-        android:layout_width="430dp"
-        android:layout_height="321dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_1">
 
     </FrameLayout>
 
@@ -38,7 +25,6 @@
         android:layout_height="68dp"
         android:layout_marginBottom="3dp"
         app:layout_constraintBottom_toTopOf="@+id/container_4"
-        app:layout_constraintEnd_toStartOf="@+id/container_2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/container_1">
 
@@ -50,13 +36,24 @@
         android:layout_height="272dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="3dp"
-        android:layout_marginEnd="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/container_2"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/container_3">
 
     </FrameLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPage"
+        android:layout_width="431dp"
+        android:layout_height="318dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/container_4"
+        app:layout_constraintTop_toBottomOf="@+id/container_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,11 @@
 package edu.temple.webbrowser;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,11 +20,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements TextFragment.ItemPickedInterface, webviewFragment.setaddressInterface,BrowserControlFragment.addingfragment {
     FragmentManager fm;
-    webviewFragment webfragment;
+    webviewFragment webfragment = new webviewFragment();
     TextFragment browser;
     BrowserControlFragment controlFragment;
     PageListFragment listfragment;
-
+    ArrayList<Fragment> arrayList;
+    ViewPager viewPager;
+    int positioner = -1;
+    webviewFragment instance;
+    FragmentStatePagerAdapter adapter;
+    ArrayList<String> title;
     /*ViewPager viewPager;
     ArrayList<webviewFragment> fragments;
     */
@@ -34,7 +41,12 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        viewPager = (ViewPager)findViewById(R.id.viewPage);
+        arrayList = new ArrayList<Fragment>();
+        title = new ArrayList<String>();
+        arrayList.add(webfragment);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), arrayList);
+        viewPager.setAdapter(adapter);
         int orientation = this.getResources().getConfiguration().orientation;
 
 
@@ -55,20 +67,20 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
 
             if (savedInstanceState == null) {
                 fm = getSupportFragmentManager();
-                webfragment = new webviewFragment();
+                //webfragment = new webviewFragment();
                 browser = new TextFragment();
                 controlFragment = new BrowserControlFragment();
                 //listfragment = new PageListFragment();
                 fm
                         .beginTransaction()
                         .replace(R.id.container_1, browser)
-                        .replace(R.id.container_2, webfragment)
+                        //.replace(R.id.viewPage, webfragment)
                         .replace(R.id.container_3, controlFragment)
                         //.replace(R.id.container_4, listfragment)
                         .commit();
             } else {
                 browser = (TextFragment) getSupportFragmentManager().findFragmentById(R.id.container_1);
-                webfragment = (webviewFragment) getSupportFragmentManager().findFragmentById(R.id.container_2);
+               // webfragment = (webviewFragment) getSupportFragmentManager().findFragmentById(R.id.viewPage);
                 controlFragment = (BrowserControlFragment) getSupportFragmentManager().findFragmentById(R.id.container_3);
                 //listfragment = (PageListFragment) getSupportFragmentManager().findFragmentById(R.id.container_4);
 
@@ -85,25 +97,27 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
     {
         if (savedInstanceState == null) {
             fm = getSupportFragmentManager();
-            webfragment = new webviewFragment();
+            //webfragment = new webviewFragment();
             browser = new TextFragment();
             controlFragment = new BrowserControlFragment();
             listfragment = new PageListFragment();
             fm
                     .beginTransaction()
                     .replace(R.id.container_1, browser)
-                    .replace(R.id.container_2, webfragment)
+                    //.replace(R.id.viewPage, webfragment)
                     .replace(R.id.container_3, controlFragment)
                     .replace(R.id.container_4, listfragment)
                     .commit();
         } else {
             browser = (TextFragment) getSupportFragmentManager().findFragmentById(R.id.container_1);
-            webfragment = (webviewFragment) getSupportFragmentManager().findFragmentById(R.id.container_2);
+            //webfragment = (webviewFragment) getSupportFragmentManager().findFragmentById(R.id.viewPage);
             controlFragment = (BrowserControlFragment) getSupportFragmentManager().findFragmentById(R.id.container_3);
             listfragment = (PageListFragment) getSupportFragmentManager().findFragmentById(R.id.container_4);
 
 
         }
+
+
     }
 
 
@@ -111,12 +125,17 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
 
     @Override
     public void itemPicked(String s) {
+        webfragment = (webviewFragment) adapter.getItem(viewPager.getCurrentItem());
         webfragment.performURL(s);
+
     }
     public void previousreturn(){
+        webfragment = (webviewFragment) adapter.getItem(viewPager.getCurrentItem());
         webfragment.goback();
     }
     public void goingforward(){
+
+        webfragment = (webviewFragment) adapter.getItem(viewPager.getCurrentItem());
         webfragment.goforward();
     }
 
@@ -138,6 +157,32 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
 
     @Override
     public void addingfragment() {
-        webfragment.addfragment();
+        arrayList.add(new webviewFragment());
+        viewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter
+    {
+        private ArrayList<Fragment> marrayList;
+        public ViewPagerAdapter(FragmentManager fm, ArrayList<Fragment> arrayList)
+        {
+            super(fm);
+            marrayList = arrayList;
+        }
+
+
+        @Override
+        public Fragment getItem(int position)
+        {
+            return marrayList.get(position);
+        }
+
+        @Override
+        public int getCount()
+        {
+            return marrayList.size();
+        }
+
+
     }
 }
