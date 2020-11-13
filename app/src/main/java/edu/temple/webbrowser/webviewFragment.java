@@ -2,12 +2,15 @@ package edu.temple.webbrowser;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
 import android.os.Message;
@@ -19,12 +22,9 @@ import android.webkit.WebViewClient;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link webviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class webviewFragment extends Fragment {
 
     View l;
@@ -32,7 +32,9 @@ public class webviewFragment extends Fragment {
     String preaddress = "https://";
     webviewFragment.setaddressInterface parentActivity;
     private final String A_KEY = "address";
-    String finaladdress;
+    static String finaladdress;
+    ViewPager viewPager;
+    final ArrayList<webviewFragment> fragments = new ArrayList<>();
 
 
     Handler responseHandler = new Handler(new Handler.Callback() {
@@ -48,6 +50,12 @@ public class webviewFragment extends Fragment {
             return false;
         }
     });
+
+    public void addfragment() {
+        fragments.add(new webviewFragment());
+        viewPager.getAdapter().notifyDataSetChanged();;
+    }
+
     private class HelloWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -108,7 +116,24 @@ public class webviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         l = inflater.inflate(R.layout.fragment_webview, container, false);
+        viewPager = l.findViewById(R.id.viewPage);
         webview = l.findViewById(R.id.webView);
+
+
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.size();
+            }
+        });
+
+
         return l;
     }
 
@@ -116,7 +141,7 @@ public class webviewFragment extends Fragment {
 
 
         try {
-            if(!s.contains(preaddress)) {
+            if(s!=null&&!s.contains(preaddress)) {
                 finaladdress = preaddress + s;
             }
             else{

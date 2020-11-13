@@ -20,6 +20,8 @@ public class TextFragment extends Fragment {
     ImageButton searchbutton;
     ImageButton previousbutton;
     ImageButton nextbutton;
+    private final String A_KEY = "address";
+
 
     ItemPickedInterface parentActivity;
 
@@ -53,14 +55,19 @@ public class TextFragment extends Fragment {
     */
 
 
-   /* public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+                if(savedInstanceState!=null){
+            webaddress.setText(savedInstanceState.getString(A_KEY));
+
+
         }
     }
-*/
+
+   public void onSaveInstanceState(@NonNull Bundle outState) {
+       super.onSaveInstanceState(outState);
+       outState.putString(A_KEY,webaddress.getEditableText().toString());
+   }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,6 +92,8 @@ public class TextFragment extends Fragment {
                 parentActivity.previousreturn();
             }
         });
+
+
         nextbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
