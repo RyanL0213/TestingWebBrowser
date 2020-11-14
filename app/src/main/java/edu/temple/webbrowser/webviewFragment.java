@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +64,14 @@ public class webviewFragment extends Fragment {
             view.loadUrl(url);
             parentActivity.setaddress(url);
             finaladdress = url;
-
             return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            getActivity().setTitle(view.getTitle());
+            parentActivity.updatetitle(view.getTitle().toString());
+            Log.d("URL","current URL is " + url);
         }
     }
 
@@ -163,6 +170,7 @@ public class webviewFragment extends Fragment {
     }
     interface setaddressInterface{
         void setaddress(String s);
+        void updatetitle(String s);
     }
 
 
