@@ -1,9 +1,11 @@
 package edu.temple.webbrowser;
 
 import android.R.id;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -20,20 +22,29 @@ import java.util.ArrayList;
 
 import static android.R.id.text1;
 
+
 public class PageListFragment extends Fragment {
 
         ListView listview;
         View l;
         ArrayList<String> title;
         static BaseAdapter adapter;
+        PageListFragment.notifychange parentActivity;
 
 
 
-    public PageListFragment(ArrayList<String> title) {
-        this.title = title;
+    public PageListFragment() {
 
     }
 
+    public static PageListFragment newInstance(ArrayList<String> title) {
+        
+        Bundle args = new Bundle();
+        args.putStringArrayList("title",title);
+        PageListFragment fragment = new PageListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,12 +55,13 @@ public class PageListFragment extends Fragment {
         listview = l.findViewById(R.id.listView);
         //ArrayAdapter itemsAdapter;
         //itemsAdapter = new ArrayAdapter<String>(this,R.layout.fragment_page_list,title);
-        adapter = new PageListAdapter(getContext().getApplicationContext(),title);
-        listview.setAdapter(adapter);
+        title=getArguments().getStringArrayList("title");
+        adapter = new PageListAdapter(getContext().getApplicationContext(),getArguments().getStringArrayList("title"));
+       listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Log.d("haha","I got clicked");
+               parentActivity.fragmentonclick(position);
             }
         });
 
@@ -57,11 +69,20 @@ public class PageListFragment extends Fragment {
 
         return l;
     }
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof PageListFragment.notifychange)
+            parentActivity = (PageListFragment.notifychange) context;
+        else
+            throw new RuntimeException("Error: no implementation of interface");
+    }
 
     interface notifychange{
         void notifychangetitle();
+        void fragmentonclick(int position);
     }
     static void changeatitle(){
+        if(adapter!=null)
         adapter.notifyDataSetChanged();
     }
 }

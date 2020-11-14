@@ -2,6 +2,7 @@ package edu.temple.webbrowser;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,12 +43,14 @@ public class webviewFragment extends Fragment {
 
         @Override
         public boolean handleMessage(@NonNull Message message) {
-            webview.canGoBack();
-            webview.canGoForward();
-            webview.setWebViewClient(new HelloWebViewClient());
-            webview.getSettings().setLoadsImagesAutomatically(true);
-            webview.getSettings().setJavaScriptEnabled(true);
-            webview.loadUrl(message.obj.toString());
+            if(webview!=null) {
+                webview.canGoBack();
+                webview.canGoForward();
+                webview.setWebViewClient(new HelloWebViewClient());
+                webview.getSettings().setLoadsImagesAutomatically(true);
+                webview.getSettings().setJavaScriptEnabled(true);
+                webview.loadUrl(message.obj.toString());
+            }
             return false;
         }
     });
@@ -69,9 +72,18 @@ public class webviewFragment extends Fragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
+            if(getActivity()!=null)
             getActivity().setTitle(view.getTitle());
-            parentActivity.updatetitle(view.getTitle().toString());
+            //parentActivity.updatetitle(view.getTitle().toString());
+            //parentActivity.updateaddress(url);
             Log.d("URL","current URL is " + url);
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            parentActivity.updatetitle(view.getTitle().toString());
+            parentActivity.updateaddress(url);
         }
     }
 
@@ -108,7 +120,7 @@ public class webviewFragment extends Fragment {
         if(savedInstanceState!=null){
             finaladdress = savedInstanceState.getString(A_KEY);
             performURL(finaladdress);
-
+            //webview.restoreState(savedInstanceState);
         }
 
     }
@@ -171,6 +183,7 @@ public class webviewFragment extends Fragment {
     interface setaddressInterface{
         void setaddress(String s);
         void updatetitle(String s);
+        void updateaddress(String url);
     }
 
 
@@ -178,6 +191,7 @@ public class webviewFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(A_KEY,finaladdress);
+       // webview.saveState(outState);
     }
 
 

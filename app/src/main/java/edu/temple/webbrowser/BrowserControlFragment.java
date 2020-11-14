@@ -25,6 +25,7 @@ public class BrowserControlFragment extends Fragment {
     View l;
     ImageButton addingbutton;
     ArrayList<webviewFragment> fragments;
+
     BrowserControlFragment.addingfragment parentActivity;
 
 
