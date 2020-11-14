@@ -1,26 +1,19 @@
 package edu.temple.webbrowser;
 
-import android.R.id;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import static android.R.id.text1;
 
 
 public class PageListFragment extends Fragment {
@@ -31,11 +24,11 @@ public class PageListFragment extends Fragment {
         static BaseAdapter adapter;
         PageListFragment.notifychange parentActivity;
 
-
-
-    public PageListFragment() {
+    public PageListFragment(){
 
     }
+
+
 
     public static PageListFragment newInstance(ArrayList<String> title) {
         
@@ -46,6 +39,8 @@ public class PageListFragment extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,8 +50,8 @@ public class PageListFragment extends Fragment {
         listview = l.findViewById(R.id.listView);
         //ArrayAdapter itemsAdapter;
         //itemsAdapter = new ArrayAdapter<String>(this,R.layout.fragment_page_list,title);
-        title=getArguments().getStringArrayList("title");
-        adapter = new PageListAdapter(getContext().getApplicationContext(),getArguments().getStringArrayList("title"));
+        title = getArguments().getStringArrayList("title");
+        adapter = new PageListAdapter(getContext().getApplicationContext(),title);
        listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -82,7 +77,6 @@ public class PageListFragment extends Fragment {
         void fragmentonclick(int position);
     }
     static void changeatitle(){
-        if(adapter!=null)
         adapter.notifyDataSetChanged();
     }
 }

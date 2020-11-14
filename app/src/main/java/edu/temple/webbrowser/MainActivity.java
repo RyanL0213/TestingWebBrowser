@@ -9,11 +9,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.BaseAdapter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TextFragment.ItemPickedInterface, webviewFragment.setaddressInterface,BrowserControlFragment.addingfragment,PageListFragment.notifychange {
     FragmentManager fm;
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
     TextFragment browser;
     BrowserControlFragment controlFragment;
     PageListFragment listfragment;
-    ArrayList<Fragment> arrayList;
+    final ArrayList<Fragment> arrayList = new ArrayList<Fragment>();;
     ViewPager viewPager;
     int positioner = -1;
     webviewFragment instance;
@@ -31,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
     BaseAdapter pagelistadapter;
     private final String A_KEY = "addresslist";
     private final String B_KEY = "titlelist";
+    private final String C_KEY = "fragmentlist";
+
+
     /*ViewPager viewPager;
     ArrayList<webviewFragment> fragments;
     */
@@ -42,12 +48,17 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(savedInstanceState!=null){
+            address = savedInstanceState.getStringArrayList(A_KEY);
+            title = savedInstanceState.getStringArrayList(B_KEY);
+           // arrayList = getSupportFragmentManager().getFragments().
+        }
         address = new ArrayList<>();
         viewPager = (ViewPager) findViewById(R.id.viewPage);
         viewPager.setOnPageChangeListener(new MyPagerChangeListener());
-        arrayList = new ArrayList<Fragment>();
+
         arrayList.add(webfragment);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), arrayList);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), (ArrayList<Fragment>) arrayList);
         viewPager.setAdapter(adapter);
         pagelistadapter = new PageListAdapter(this, title);
         address.add("");
@@ -187,12 +198,14 @@ public class MainActivity extends AppCompatActivity implements TextFragment.Item
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        getSupportFragmentManager().putFragment(outState, "browser1", browser);
-        getSupportFragmentManager().putFragment(outState, "webviewFrag", webfragment);
-        getSupportFragmentManager().putFragment(outState, "controlfrag", controlFragment);
-        getSupportFragmentManager().putFragment(outState,"listfrag",listfragment);
+        //getSupportFragmentManager().putFragment(outState, "browser1", browser);
+        //getSupportFragmentManager().putFragment(outState, "webviewFrag", webfragment);
+        //getSupportFragmentManager().putFragment(outState, "controlfrag", controlFragment);
+        //getSupportFragmentManager().putFragment(outState,"listfrag",listfragment);
         outState.putStringArrayList(A_KEY,address);
         outState.putStringArrayList(B_KEY,title);
+       // outState.putParcelableArrayList(C_KEY, (ArrayList<? extends Parcelable>) arrayList);
+
 
 
 
